@@ -1,7 +1,6 @@
 package ru.ovsyannikova.calculator.domain.entity;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
 
 @Entity
 public class EvaluationTask {
@@ -14,6 +13,8 @@ public class EvaluationTask {
     private String created;
     @Column(name = "result")
     private Double result;
+
+    public EvaluationTask() {}
 
     public EvaluationTask(String task, String created, Double result) {
         this.task = task;

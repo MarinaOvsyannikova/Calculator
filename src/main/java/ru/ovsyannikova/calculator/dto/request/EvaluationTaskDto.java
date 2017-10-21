@@ -3,6 +3,9 @@ package ru.ovsyannikova.calculator.dto.request;
 public class EvaluationTaskDto {
     private String task;
 
+    public EvaluationTaskDto() {
+    }
+
     public EvaluationTaskDto(String task) {
         this.task = task;
     }
