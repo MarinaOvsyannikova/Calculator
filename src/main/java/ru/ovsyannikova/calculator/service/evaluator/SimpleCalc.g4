@@ -29,6 +29,7 @@ powerExp returns [double value]
 
 unaryExp returns [double value]
     : MINUS a=atomExp {$value = -$a.value;}
+    | PLUS a=atomExp {$value = $a.value;}
     | a=atomExp {$value = $a.value;}
     ;
 

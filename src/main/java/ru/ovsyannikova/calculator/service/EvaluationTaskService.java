@@ -3,34 +3,41 @@ package ru.ovsyannikova.calculator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ovsyannikova.calculator.domain.entity.EvaluationTask;
-import ru.ovsyannikova.calculator.domain.repository.EvaliationTaskRepository;
-import ru.ovsyannikova.calculator.dto.request.EvaluationTaskDto;
-import ru.ovsyannikova.calculator.evaluator.EvaluatorService;
+import ru.ovsyannikova.calculator.domain.entity.NumberCounter;
+import ru.ovsyannikova.calculator.domain.repository.EvaluationTaskRepository;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.io.IOException;
 
 @Service
 public class EvaluationTaskService {
-    private EvaliationTaskRepository evaliationTaskRepository;
+    private Evaluator evaluator;
+    private EvaluationTaskRepository taskRepository;
 
     @Autowired
-    public EvaluationTaskService(EvaliationTaskRepository evaliationTaskRepository) {
-        this.evaliationTaskRepository = evaliationTaskRepository;
+    public EvaluationTaskService(Evaluator evaluator, EvaluationTaskRepository taskRepository) {
+        this.evaluator = evaluator;
+        this.taskRepository = taskRepository;
     }
 
-    public List<EvaluationTask> getAllTasks() {
-        return (List<EvaluationTask>) evaliationTaskRepository.findAll();
+    public EvaluationResult evaluate(String task) throws IOException {
+        try{
+            return evaluator.getResult(task);
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("Wrong expression for evaluation: " + task);
+        }
     }
 
-    public EvaluationTask createEvaluationTask(EvaluationTaskDto evaluationTaskDto) {
-        OffsetDateTime time = OffsetDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String resultDate = time.format(formatter);
-        String task = evaluationTaskDto.getTask();
-
-        EvaluationTask evaluationTask = new EvaluationTask(task, resultDate, EvaluatorService.evaluate(task));
-        return evaliationTaskRepository.save(evaluationTask);
+    public Iterable<EvaluationTask> getAllTasks() {
+        return taskRepository.findAll();
     }
+
+    public Number countTasksbyDate(String date) {
+        return taskRepository.countAllByCreated(date);
+    }
+
+    public Iterable<EvaluationTask> findAllByDate(String date) {
+        return taskRepository.findAllByCreated(date);
+    }
+
+
 }

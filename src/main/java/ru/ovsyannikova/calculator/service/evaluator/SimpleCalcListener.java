@@ -1,5 +1,5 @@
-// Generated from /home/andromeda/IdeaProjects/Calculator/src/main/java/ru/ovsyannikova/calculator/evaluator/SimpleCalc.g4 by ANTLR 4.7
-package ru.ovsyannikova.calculator.evaluator;
+// Generated from /home/andromeda/IdeaProjects/Calculator/src/main/java/ru/ovsyannikova/calculator/service/evaluator/SimpleCalc.g4 by ANTLR 4.7
+package ru.ovsyannikova.calculator.service.evaluator;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

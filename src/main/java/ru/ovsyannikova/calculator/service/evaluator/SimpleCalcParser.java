@@ -1,5 +1,5 @@
-// Generated from /home/andromeda/IdeaProjects/Calculator/src/main/java/ru/ovsyannikova/calculator/evaluator/SimpleCalc.g4 by ANTLR 4.7
-package ru.ovsyannikova.calculator.evaluator;
+// Generated from /home/andromeda/IdeaProjects/Calculator/src/main/java/ru/ovsyannikova/calculator/service/evaluator/SimpleCalc.g4 by ANTLR 4.7
+package ru.ovsyannikova.calculator.service.evaluator;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -377,6 +377,7 @@ public class SimpleCalcParser extends Parser {
 		public AtomExpContext atomExp() {
 			return getRuleContext(AtomExpContext.class,0);
 		}
+		public TerminalNode PLUS() { return getToken(SimpleCalcParser.PLUS, 0); }
 		public UnaryExpContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -395,7 +396,7 @@ public class SimpleCalcParser extends Parser {
 		UnaryExpContext _localctx = new UnaryExpContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_unaryExp);
 		try {
-			setState(63);
+			setState(67);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case MINUS:
@@ -408,11 +409,21 @@ public class SimpleCalcParser extends Parser {
 				((UnaryExpContext)_localctx).value =  -((UnaryExpContext)_localctx).a.value;
 				}
 				break;
-			case LPAREN:
-			case NUMBER:
+			case PLUS:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(60);
+				match(PLUS);
+				setState(61);
+				((UnaryExpContext)_localctx).a = atomExp();
+				((UnaryExpContext)_localctx).value =  ((UnaryExpContext)_localctx).a.value;
+				}
+				break;
+			case LPAREN:
+			case NUMBER:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(64);
 				((UnaryExpContext)_localctx).a = atomExp();
 				((UnaryExpContext)_localctx).value =  ((UnaryExpContext)_localctx).a.value;
 				}
@@ -460,13 +471,13 @@ public class SimpleCalcParser extends Parser {
 		AtomExpContext _localctx = new AtomExpContext(_ctx, getState());
 		enterRule(_localctx, 10, RULE_atomExp);
 		try {
-			setState(72);
+			setState(76);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NUMBER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(65);
+				setState(69);
 				((AtomExpContext)_localctx).n = match(NUMBER);
 				((AtomExpContext)_localctx).value =  Double.parseDouble((((AtomExpContext)_localctx).n!=null?((AtomExpContext)_localctx).n.getText():null));
 				}
@@ -474,11 +485,11 @@ public class SimpleCalcParser extends Parser {
 			case LPAREN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(67);
+				setState(71);
 				match(LPAREN);
-				setState(68);
+				setState(72);
 				((AtomExpContext)_localctx).exp = additionExp();
-				setState(69);
+				setState(73);
 				match(RPAREN);
 				((AtomExpContext)_localctx).value =  ((AtomExpContext)_localctx).exp.value;
 				}
@@ -499,25 +510,26 @@ public class SimpleCalcParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\rM\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\rQ\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\7\3\34\n\3\f\3\16\3\37\13\3\3\4\3\4\3\4\3\4\3\4\3\4\3"+
 		"\4\3\4\3\4\3\4\7\4+\n\4\f\4\16\4.\13\4\3\5\3\5\3\5\3\5\3\5\3\5\7\5\66"+
-		"\n\5\f\5\16\59\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6B\n\6\3\7\3\7\3\7\3"+
-		"\7\3\7\3\7\3\7\5\7K\n\7\3\7\2\2\b\2\4\6\b\n\f\2\2\2M\2\16\3\2\2\2\4\21"+
-		"\3\2\2\2\6 \3\2\2\2\b/\3\2\2\2\nA\3\2\2\2\fJ\3\2\2\2\16\17\5\4\3\2\17"+
-		"\20\b\2\1\2\20\3\3\2\2\2\21\22\5\6\4\2\22\35\b\3\1\2\23\24\7\7\2\2\24"+
-		"\25\5\6\4\2\25\26\b\3\1\2\26\34\3\2\2\2\27\30\7\b\2\2\30\31\5\6\4\2\31"+
-		"\32\b\3\1\2\32\34\3\2\2\2\33\23\3\2\2\2\33\27\3\2\2\2\34\37\3\2\2\2\35"+
-		"\33\3\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35\3\2\2\2 !\5\b\5\2!,\b\4\1"+
-		"\2\"#\7\t\2\2#$\5\b\5\2$%\b\4\1\2%+\3\2\2\2&\'\7\6\2\2\'(\5\b\5\2()\b"+
-		"\4\1\2)+\3\2\2\2*\"\3\2\2\2*&\3\2\2\2+.\3\2\2\2,*\3\2\2\2,-\3\2\2\2-\7"+
-		"\3\2\2\2.,\3\2\2\2/\60\5\n\6\2\60\67\b\5\1\2\61\62\7\n\2\2\62\63\5\n\6"+
-		"\2\63\64\b\5\1\2\64\66\3\2\2\2\65\61\3\2\2\2\669\3\2\2\2\67\65\3\2\2\2"+
-		"\678\3\2\2\28\t\3\2\2\29\67\3\2\2\2:;\7\b\2\2;<\5\f\7\2<=\b\6\1\2=B\3"+
-		"\2\2\2>?\5\f\7\2?@\b\6\1\2@B\3\2\2\2A:\3\2\2\2A>\3\2\2\2B\13\3\2\2\2C"+
-		"D\7\13\2\2DK\b\7\1\2EF\7\3\2\2FG\5\4\3\2GH\7\4\2\2HI\b\7\1\2IK\3\2\2\2"+
-		"JC\3\2\2\2JE\3\2\2\2K\r\3\2\2\2\t\33\35*,\67AJ";
+		"\n\5\f\5\16\59\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6F\n"+
+		"\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7O\n\7\3\7\2\2\b\2\4\6\b\n\f\2\2\2R\2"+
+		"\16\3\2\2\2\4\21\3\2\2\2\6 \3\2\2\2\b/\3\2\2\2\nE\3\2\2\2\fN\3\2\2\2\16"+
+		"\17\5\4\3\2\17\20\b\2\1\2\20\3\3\2\2\2\21\22\5\6\4\2\22\35\b\3\1\2\23"+
+		"\24\7\7\2\2\24\25\5\6\4\2\25\26\b\3\1\2\26\34\3\2\2\2\27\30\7\b\2\2\30"+
+		"\31\5\6\4\2\31\32\b\3\1\2\32\34\3\2\2\2\33\23\3\2\2\2\33\27\3\2\2\2\34"+
+		"\37\3\2\2\2\35\33\3\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35\3\2\2\2 !\5"+
+		"\b\5\2!,\b\4\1\2\"#\7\t\2\2#$\5\b\5\2$%\b\4\1\2%+\3\2\2\2&\'\7\6\2\2\'"+
+		"(\5\b\5\2()\b\4\1\2)+\3\2\2\2*\"\3\2\2\2*&\3\2\2\2+.\3\2\2\2,*\3\2\2\2"+
+		",-\3\2\2\2-\7\3\2\2\2.,\3\2\2\2/\60\5\n\6\2\60\67\b\5\1\2\61\62\7\n\2"+
+		"\2\62\63\5\n\6\2\63\64\b\5\1\2\64\66\3\2\2\2\65\61\3\2\2\2\669\3\2\2\2"+
+		"\67\65\3\2\2\2\678\3\2\2\28\t\3\2\2\29\67\3\2\2\2:;\7\b\2\2;<\5\f\7\2"+
+		"<=\b\6\1\2=F\3\2\2\2>?\7\7\2\2?@\5\f\7\2@A\b\6\1\2AF\3\2\2\2BC\5\f\7\2"+
+		"CD\b\6\1\2DF\3\2\2\2E:\3\2\2\2E>\3\2\2\2EB\3\2\2\2F\13\3\2\2\2GH\7\13"+
+		"\2\2HO\b\7\1\2IJ\7\3\2\2JK\5\4\3\2KL\7\4\2\2LM\b\7\1\2MO\3\2\2\2NG\3\2"+
+		"\2\2NI\3\2\2\2O\r\3\2\2\2\t\33\35*,\67EN";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
