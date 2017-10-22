@@ -11,13 +11,11 @@ import ru.ovsyannikova.calculator.domain.entity.NumberCounter;
 import ru.ovsyannikova.calculator.domain.repository.NumberCounterRepository;
 import ru.ovsyannikova.calculator.dto.request.DateDto;
 import ru.ovsyannikova.calculator.dto.request.EvaluationTaskDto;
-import ru.ovsyannikova.calculator.dto.response.EvaluationTaskDetailsResponse;
-import ru.ovsyannikova.calculator.dto.response.EvaluationTasksResponse;
-import ru.ovsyannikova.calculator.dto.response.NumberCounterResponse;
-import ru.ovsyannikova.calculator.dto.response.TasksCountResponse;
+import ru.ovsyannikova.calculator.dto.response.*;
 import ru.ovsyannikova.calculator.service.EvaluationResult;
 import ru.ovsyannikova.calculator.service.EvaluationResultService;
 import ru.ovsyannikova.calculator.service.EvaluationTaskService;
+import ru.ovsyannikova.calculator.service.NumberCounterService;
 
 import java.io.IOException;
 
@@ -25,13 +23,13 @@ import java.io.IOException;
 public class EvaluationTaskController {
     private EvaluationTaskService taskService;
     private EvaluationResultService resultService;
-    private NumberCounterRepository numberCounterRepository;
+    private NumberCounterService counterService;
 
     @Autowired
-    public EvaluationTaskController(EvaluationTaskService taskService, EvaluationResultService resultService, NumberCounterRepository numberCounterRepository) {
+    public EvaluationTaskController(EvaluationTaskService taskService, EvaluationResultService resultService, NumberCounterService counterService) {
         this.taskService = taskService;
         this.resultService = resultService;
-        this.numberCounterRepository = numberCounterRepository;
+        this.counterService = counterService;
     }
 
 //    @RequestMapping(value = "/calculations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
@@ -65,6 +63,12 @@ public class EvaluationTaskController {
     @RequestMapping(value = "/ondate", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public EvaluationTasksResponse findTasksByDate(DateDto request) {
         EvaluationTasksResponse response = new EvaluationTasksResponse(taskService.findAllByDate(request.getDate()));
+        return response;
+    }
+
+    @RequestMapping(value = "/popular", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public NumberCounterDetailsResponse findMostPopularNumber() {
+        NumberCounterDetailsResponse response = new NumberCounterDetailsResponse(counterService.getPopularNumber().getNumber());
         return response;
     }
 }

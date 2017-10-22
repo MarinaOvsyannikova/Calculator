@@ -9,4 +9,6 @@ public interface EvaluationTaskRepository extends CrudRepository<EvaluationTask,
     List<EvaluationTask> findAllByCreated(String date);
 
     Number countAllByCreated(String date);
+
+
 }
