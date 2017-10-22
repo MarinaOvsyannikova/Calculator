@@ -22,11 +22,12 @@ public class Evaluator {
         CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
         SimpleCalcParser parser = new SimpleCalcParser(commonTokenStream);
         EvaluationResult result = evaluate(task, parser);
+        result = prepareOperations(result, commonTokenStream);
         return prepareNumbers(result, commonTokenStream);
     }
 
     private EvaluationResult evaluate(String task, SimpleCalcParser parser) {
-        return new EvaluationResult(task, parser.eval().value, new HashMap<>());
+        return new EvaluationResult(task, parser.eval().value, new HashMap<>(), new HashMap<>());
     }
 
     private EvaluationResult prepareNumbers(EvaluationResult result, CommonTokenStream commonTokenStream) {
@@ -42,6 +43,28 @@ public class Evaluator {
             }
         }
         result.setNumberAmounts(hashMap);
+        return result;
+    }
+
+    private EvaluationResult prepareOperations(EvaluationResult result, CommonTokenStream commonTokenStream) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        hashMap.put("+", 0);
+        hashMap.put("-", 0);
+        hashMap.put("*", 0);
+        hashMap.put("/", 0);
+        hashMap.put("(", 0);
+        hashMap.put("^", 0);
+        hashMap.put(")", 0);
+
+        List<Token> array = commonTokenStream.getTokens();
+        for (Token o: array) {
+            if (o.getType() != 9 && o.getType() != 10 && o.getType() != 11 && o.getType() != -1) {
+                String operation = o.getText();
+                Integer count = hashMap.get(operation);
+                hashMap.put(operation, count + 1);
+            }
+        }
+        result.setOperationAmounts(hashMap);
         return result;
     }
 }

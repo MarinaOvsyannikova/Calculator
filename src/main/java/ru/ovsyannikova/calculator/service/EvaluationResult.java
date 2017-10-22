@@ -6,14 +6,16 @@ public class EvaluationResult {
     private String task;
     private Double result;
     private HashMap<Number, Integer> numberAmounts;
+    private HashMap<String, Integer> operationAmounts;
 
     public EvaluationResult() {
     }
 
-    public EvaluationResult(String task, Double result, HashMap<Number, Integer> numberAmounts) {
+    public EvaluationResult(String task, Double result, HashMap<Number, Integer> numberAmounts, HashMap<String, Integer> operationAmounts) {
         this.task = task;
         this.result = result;
         this.numberAmounts = numberAmounts;
+        this.operationAmounts = operationAmounts;
     }
 
     public String getTask() {
@@ -38,5 +40,13 @@ public class EvaluationResult {
 
     public void setNumberAmounts(HashMap<Number, Integer> numberAmounts) {
         this.numberAmounts = numberAmounts;
+    }
+
+    public HashMap<String, Integer> getOperationAmounts() {
+        return operationAmounts;
+    }
+
+    public void setOperationAmounts(HashMap<String, Integer> operationAmounts) {
+        this.operationAmounts = operationAmounts;
     }
 }

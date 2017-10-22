@@ -36,11 +36,19 @@ public class EvaluationResultService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String resultDate = time.format(formatter);
 
-        EvaluationTask evaluationTask = new EvaluationTask(evaluationResult.getTask(), resultDate, evaluationResult.getResult());
+        EvaluationTask evaluationTask = new EvaluationTask(evaluationResult.getTask(), resultDate, evaluationResult.getResult(),
+                evaluationResult.getOperationAmounts().get("+"),
+                evaluationResult.getOperationAmounts().get("-"),
+                evaluationResult.getOperationAmounts().get("*"),
+                evaluationResult.getOperationAmounts().get("/"),
+                evaluationResult.getOperationAmounts().get("^"),
+                evaluationResult.getOperationAmounts().get("("),
+                evaluationResult.getOperationAmounts().get(")")
+                );
         evaluationTaskRepository.save(evaluationTask);
     }
 
-    public void collectNumber(Number number, Integer count) {
+    private void collectNumber(Number number, Integer count) {
         NumberCounter numberCounter = numberCounterRepository.findByNumber(number);
         if (numberCounter == null)
             numberCounter = new NumberCounter(number, (long) 0);
@@ -55,5 +63,7 @@ public class EvaluationResultService {
             collectNumber(elem.getKey(), elem.getValue());
         }
     }
+
+
 
 }

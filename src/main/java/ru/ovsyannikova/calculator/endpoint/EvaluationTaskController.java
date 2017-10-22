@@ -2,15 +2,13 @@ package ru.ovsyannikova.calculator.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ovsyannikova.calculator.domain.entity.EvaluationTask;
-import ru.ovsyannikova.calculator.domain.entity.NumberCounter;
-import ru.ovsyannikova.calculator.domain.repository.NumberCounterRepository;
 import ru.ovsyannikova.calculator.dto.request.DateDto;
 import ru.ovsyannikova.calculator.dto.request.EvaluationTaskDto;
+import ru.ovsyannikova.calculator.dto.request.OperationDto;
 import ru.ovsyannikova.calculator.dto.response.*;
 import ru.ovsyannikova.calculator.service.EvaluationResult;
 import ru.ovsyannikova.calculator.service.EvaluationResultService;
@@ -56,7 +54,7 @@ public class EvaluationTaskController {
 
     @RequestMapping(value = "/count", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public TasksCountResponse countTaskByDate(DateDto request) {
-        TasksCountResponse response = new TasksCountResponse(taskService.countTasksbyDate(request.getDate()));
+        TasksCountResponse response = new TasksCountResponse(taskService.countTasksByDate(request.getDate()));
         return response;
     }
 
@@ -69,6 +67,18 @@ public class EvaluationTaskController {
     @RequestMapping(value = "/popular", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public NumberCounterDetailsResponse findMostPopularNumber() {
         NumberCounterDetailsResponse response = new NumberCounterDetailsResponse(counterService.getPopularNumber().getNumber());
+        return response;
+    }
+
+    @RequestMapping(value = "/operation", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public TasksCountResponse countTasksWithOperation(OperationDto request) {
+        TasksCountResponse response = new TasksCountResponse(taskService.countTasksByOperation(request.getOperation()));
+        return response;
+    }
+
+    @RequestMapping(value = "/onoperation", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public EvaluationTasksResponse findTasksWithOperation(OperationDto request) {
+        EvaluationTasksResponse response = new EvaluationTasksResponse(taskService.findTasksByOperation(request.getOperation()));
         return response;
     }
 }
