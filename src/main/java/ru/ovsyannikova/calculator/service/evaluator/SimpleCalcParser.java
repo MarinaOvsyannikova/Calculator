@@ -253,7 +253,7 @@ public class SimpleCalcParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(30);
-			((MultiplyExpContext)_localctx).a1 = powerExp();
+			((MultiplyExpContext)_localctx).a1 = powerExp(0);
 			((MultiplyExpContext)_localctx).value =   ((MultiplyExpContext)_localctx).a1.value;
 			setState(42);
 			_errHandler.sync(this);
@@ -268,7 +268,7 @@ public class SimpleCalcParser extends Parser {
 					setState(32);
 					match(MULT);
 					setState(33);
-					((MultiplyExpContext)_localctx).a2 = powerExp();
+					((MultiplyExpContext)_localctx).a2 = powerExp(0);
 					_localctx.value *= ((MultiplyExpContext)_localctx).a2.value;
 					}
 					break;
@@ -277,7 +277,7 @@ public class SimpleCalcParser extends Parser {
 					setState(36);
 					match(DIV);
 					setState(37);
-					((MultiplyExpContext)_localctx).a2 = powerExp();
+					((MultiplyExpContext)_localctx).a2 = powerExp(0);
 					_localctx.value /= ((MultiplyExpContext)_localctx).a2.value;
 					}
 					break;
@@ -304,17 +304,19 @@ public class SimpleCalcParser extends Parser {
 
 	public static class PowerExpContext extends ParserRuleContext {
 		public double value;
+		public PowerExpContext p;
 		public UnaryExpContext u1;
 		public UnaryExpContext u2;
+		public UnaryExpContext u;
+		public TerminalNode POWER() { return getToken(SimpleCalcParser.POWER, 0); }
 		public List<UnaryExpContext> unaryExp() {
 			return getRuleContexts(UnaryExpContext.class);
 		}
 		public UnaryExpContext unaryExp(int i) {
 			return getRuleContext(UnaryExpContext.class,i);
 		}
-		public List<TerminalNode> POWER() { return getTokens(SimpleCalcParser.POWER); }
-		public TerminalNode POWER(int i) {
-			return getToken(SimpleCalcParser.POWER, i);
+		public PowerExpContext powerExp() {
+			return getRuleContext(PowerExpContext.class,0);
 		}
 		public PowerExpContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -331,31 +333,71 @@ public class SimpleCalcParser extends Parser {
 	}
 
 	public final PowerExpContext powerExp() throws RecognitionException {
-		PowerExpContext _localctx = new PowerExpContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_powerExp);
-		int _la;
+		return powerExp(0);
+	}
+
+	private PowerExpContext powerExp(int _p) throws RecognitionException {
+		ParserRuleContext _parentctx = _ctx;
+		int _parentState = getState();
+		PowerExpContext _localctx = new PowerExpContext(_ctx, _parentState);
+		PowerExpContext _prevctx = _localctx;
+		int _startState = 6;
+		enterRecursionRule(_localctx, 6, RULE_powerExp, _p);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(45);
-			((PowerExpContext)_localctx).u1 = unaryExp();
-			((PowerExpContext)_localctx).value =   ((PowerExpContext)_localctx).u1.value;
-			setState(53);
+			setState(55);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==POWER) {
+			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			case 1:
 				{
-				{
-				setState(47);
-				match(POWER);
+				setState(46);
+				((PowerExpContext)_localctx).u1 = unaryExp();
+				((PowerExpContext)_localctx).value =   ((PowerExpContext)_localctx).u1.value;
 				setState(48);
+				match(POWER);
+				setState(49);
 				((PowerExpContext)_localctx).u2 = unaryExp();
 				((PowerExpContext)_localctx).value =  Math.pow(((PowerExpContext)_localctx).u1.value, ((PowerExpContext)_localctx).u2.value);
 				}
+				break;
+			case 2:
+				{
+				setState(52);
+				((PowerExpContext)_localctx).u = unaryExp();
+				((PowerExpContext)_localctx).value =   ((PowerExpContext)_localctx).u.value;
 				}
-				setState(55);
+				break;
+			}
+			_ctx.stop = _input.LT(-1);
+			setState(65);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					if ( _parseListeners!=null ) triggerExitRuleEvent();
+					_prevctx = _localctx;
+					{
+					{
+					_localctx = new PowerExpContext(_parentctx, _parentState);
+					_localctx.p = _prevctx;
+					_localctx.p = _prevctx;
+					pushNewRecursionContext(_localctx, _startState, RULE_powerExp);
+					setState(57);
+					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+					((PowerExpContext)_localctx).value =   ((PowerExpContext)_localctx).p.value;
+					setState(59);
+					match(POWER);
+					setState(60);
+					((PowerExpContext)_localctx).u = unaryExp();
+					((PowerExpContext)_localctx).value =  Math.pow(((PowerExpContext)_localctx).p.value, ((PowerExpContext)_localctx).u.value);
+					}
+					} 
+				}
+				setState(67);
 				_errHandler.sync(this);
-				_la = _input.LA(1);
+				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			}
 			}
 		}
@@ -365,7 +407,7 @@ public class SimpleCalcParser extends Parser {
 			_errHandler.recover(this, re);
 		}
 		finally {
-			exitRule();
+			unrollRecursionContexts(_parentctx);
 		}
 		return _localctx;
 	}
@@ -373,11 +415,15 @@ public class SimpleCalcParser extends Parser {
 	public static class UnaryExpContext extends ParserRuleContext {
 		public double value;
 		public AtomExpContext a;
+		public UnaryExpContext u;
 		public TerminalNode MINUS() { return getToken(SimpleCalcParser.MINUS, 0); }
 		public AtomExpContext atomExp() {
 			return getRuleContext(AtomExpContext.class,0);
 		}
 		public TerminalNode PLUS() { return getToken(SimpleCalcParser.PLUS, 0); }
+		public UnaryExpContext unaryExp() {
+			return getRuleContext(UnaryExpContext.class,0);
+		}
 		public UnaryExpContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -396,40 +442,57 @@ public class SimpleCalcParser extends Parser {
 		UnaryExpContext _localctx = new UnaryExpContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_unaryExp);
 		try {
-			setState(67);
+			setState(87);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case MINUS:
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(56);
+				setState(68);
 				match(MINUS);
-				setState(57);
+				setState(69);
 				((UnaryExpContext)_localctx).a = atomExp();
 				((UnaryExpContext)_localctx).value =  -((UnaryExpContext)_localctx).a.value;
 				}
 				break;
-			case PLUS:
+			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(60);
+				setState(72);
 				match(PLUS);
-				setState(61);
+				setState(73);
 				((UnaryExpContext)_localctx).a = atomExp();
 				((UnaryExpContext)_localctx).value =  ((UnaryExpContext)_localctx).a.value;
 				}
 				break;
-			case LPAREN:
-			case NUMBER:
+			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(64);
+				setState(76);
 				((UnaryExpContext)_localctx).a = atomExp();
 				((UnaryExpContext)_localctx).value =  ((UnaryExpContext)_localctx).a.value;
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(79);
+				match(MINUS);
+				setState(80);
+				((UnaryExpContext)_localctx).u = unaryExp();
+				((UnaryExpContext)_localctx).value =  -((UnaryExpContext)_localctx).u.value;
+				}
+				break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(83);
+				match(PLUS);
+				setState(84);
+				((UnaryExpContext)_localctx).u = unaryExp();
+				((UnaryExpContext)_localctx).value =  ((UnaryExpContext)_localctx).u.value;
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -471,13 +534,13 @@ public class SimpleCalcParser extends Parser {
 		AtomExpContext _localctx = new AtomExpContext(_ctx, getState());
 		enterRule(_localctx, 10, RULE_atomExp);
 		try {
-			setState(76);
+			setState(96);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NUMBER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(69);
+				setState(89);
 				((AtomExpContext)_localctx).n = match(NUMBER);
 				((AtomExpContext)_localctx).value =  Double.parseDouble((((AtomExpContext)_localctx).n!=null?((AtomExpContext)_localctx).n.getText():null));
 				}
@@ -485,11 +548,11 @@ public class SimpleCalcParser extends Parser {
 			case LPAREN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(71);
+				setState(91);
 				match(LPAREN);
-				setState(72);
+				setState(92);
 				((AtomExpContext)_localctx).exp = additionExp();
-				setState(73);
+				setState(93);
 				match(RPAREN);
 				((AtomExpContext)_localctx).value =  ((AtomExpContext)_localctx).exp.value;
 				}
@@ -509,27 +572,47 @@ public class SimpleCalcParser extends Parser {
 		return _localctx;
 	}
 
+	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
+		switch (ruleIndex) {
+		case 3:
+			return powerExp_sempred((PowerExpContext)_localctx, predIndex);
+		}
+		return true;
+	}
+	private boolean powerExp_sempred(PowerExpContext _localctx, int predIndex) {
+		switch (predIndex) {
+		case 0:
+			return precpred(_ctx, 2);
+		}
+		return true;
+	}
+
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\rQ\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\re\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\7\3\34\n\3\f\3\16\3\37\13\3\3\4\3\4\3\4\3\4\3\4\3\4\3"+
-		"\4\3\4\3\4\3\4\7\4+\n\4\f\4\16\4.\13\4\3\5\3\5\3\5\3\5\3\5\3\5\7\5\66"+
-		"\n\5\f\5\16\59\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6F\n"+
-		"\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7O\n\7\3\7\2\2\b\2\4\6\b\n\f\2\2\2R\2"+
-		"\16\3\2\2\2\4\21\3\2\2\2\6 \3\2\2\2\b/\3\2\2\2\nE\3\2\2\2\fN\3\2\2\2\16"+
-		"\17\5\4\3\2\17\20\b\2\1\2\20\3\3\2\2\2\21\22\5\6\4\2\22\35\b\3\1\2\23"+
-		"\24\7\7\2\2\24\25\5\6\4\2\25\26\b\3\1\2\26\34\3\2\2\2\27\30\7\b\2\2\30"+
-		"\31\5\6\4\2\31\32\b\3\1\2\32\34\3\2\2\2\33\23\3\2\2\2\33\27\3\2\2\2\34"+
-		"\37\3\2\2\2\35\33\3\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35\3\2\2\2 !\5"+
-		"\b\5\2!,\b\4\1\2\"#\7\t\2\2#$\5\b\5\2$%\b\4\1\2%+\3\2\2\2&\'\7\6\2\2\'"+
-		"(\5\b\5\2()\b\4\1\2)+\3\2\2\2*\"\3\2\2\2*&\3\2\2\2+.\3\2\2\2,*\3\2\2\2"+
-		",-\3\2\2\2-\7\3\2\2\2.,\3\2\2\2/\60\5\n\6\2\60\67\b\5\1\2\61\62\7\n\2"+
-		"\2\62\63\5\n\6\2\63\64\b\5\1\2\64\66\3\2\2\2\65\61\3\2\2\2\669\3\2\2\2"+
-		"\67\65\3\2\2\2\678\3\2\2\28\t\3\2\2\29\67\3\2\2\2:;\7\b\2\2;<\5\f\7\2"+
-		"<=\b\6\1\2=F\3\2\2\2>?\7\7\2\2?@\5\f\7\2@A\b\6\1\2AF\3\2\2\2BC\5\f\7\2"+
-		"CD\b\6\1\2DF\3\2\2\2E:\3\2\2\2E>\3\2\2\2EB\3\2\2\2F\13\3\2\2\2GH\7\13"+
-		"\2\2HO\b\7\1\2IJ\7\3\2\2JK\5\4\3\2KL\7\4\2\2LM\b\7\1\2MO\3\2\2\2NG\3\2"+
-		"\2\2NI\3\2\2\2O\r\3\2\2\2\t\33\35*,\67EN";
+		"\4\3\4\3\4\3\4\7\4+\n\4\f\4\16\4.\13\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
+		"\3\5\3\5\5\5:\n\5\3\5\3\5\3\5\3\5\3\5\3\5\7\5B\n\5\f\5\16\5E\13\5\3\6"+
+		"\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
+		"\6\5\6Z\n\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7c\n\7\3\7\2\3\b\b\2\4\6\b\n"+
+		"\f\2\2\2i\2\16\3\2\2\2\4\21\3\2\2\2\6 \3\2\2\2\b9\3\2\2\2\nY\3\2\2\2\f"+
+		"b\3\2\2\2\16\17\5\4\3\2\17\20\b\2\1\2\20\3\3\2\2\2\21\22\5\6\4\2\22\35"+
+		"\b\3\1\2\23\24\7\7\2\2\24\25\5\6\4\2\25\26\b\3\1\2\26\34\3\2\2\2\27\30"+
+		"\7\b\2\2\30\31\5\6\4\2\31\32\b\3\1\2\32\34\3\2\2\2\33\23\3\2\2\2\33\27"+
+		"\3\2\2\2\34\37\3\2\2\2\35\33\3\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35"+
+		"\3\2\2\2 !\5\b\5\2!,\b\4\1\2\"#\7\t\2\2#$\5\b\5\2$%\b\4\1\2%+\3\2\2\2"+
+		"&\'\7\6\2\2\'(\5\b\5\2()\b\4\1\2)+\3\2\2\2*\"\3\2\2\2*&\3\2\2\2+.\3\2"+
+		"\2\2,*\3\2\2\2,-\3\2\2\2-\7\3\2\2\2.,\3\2\2\2/\60\b\5\1\2\60\61\5\n\6"+
+		"\2\61\62\b\5\1\2\62\63\7\n\2\2\63\64\5\n\6\2\64\65\b\5\1\2\65:\3\2\2\2"+
+		"\66\67\5\n\6\2\678\b\5\1\28:\3\2\2\29/\3\2\2\29\66\3\2\2\2:C\3\2\2\2;"+
+		"<\f\4\2\2<=\b\5\1\2=>\7\n\2\2>?\5\n\6\2?@\b\5\1\2@B\3\2\2\2A;\3\2\2\2"+
+		"BE\3\2\2\2CA\3\2\2\2CD\3\2\2\2D\t\3\2\2\2EC\3\2\2\2FG\7\b\2\2GH\5\f\7"+
+		"\2HI\b\6\1\2IZ\3\2\2\2JK\7\7\2\2KL\5\f\7\2LM\b\6\1\2MZ\3\2\2\2NO\5\f\7"+
+		"\2OP\b\6\1\2PZ\3\2\2\2QR\7\b\2\2RS\5\n\6\2ST\b\6\1\2TZ\3\2\2\2UV\7\7\2"+
+		"\2VW\5\n\6\2WX\b\6\1\2XZ\3\2\2\2YF\3\2\2\2YJ\3\2\2\2YN\3\2\2\2YQ\3\2\2"+
+		"\2YU\3\2\2\2Z\13\3\2\2\2[\\\7\13\2\2\\c\b\7\1\2]^\7\3\2\2^_\5\4\3\2_`"+
+		"\7\4\2\2`a\b\7\1\2ac\3\2\2\2b[\3\2\2\2b]\3\2\2\2c\r\3\2\2\2\n\33\35*,"+
+		"9CYb";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

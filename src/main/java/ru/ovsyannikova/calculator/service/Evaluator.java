@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ovsyannikova.calculator.service.evaluator.SimpleCalcLexer;
 import ru.ovsyannikova.calculator.service.evaluator.SimpleCalcParser;
@@ -15,6 +16,10 @@ import java.util.List;
 
 @Service
 public class Evaluator {
+
+    @Autowired
+    public Evaluator() {
+    }
 
     public EvaluationResult getResult(String task) throws IOException {
         CodePointCharStream in = CharStreams.fromReader(new StringReader(task));

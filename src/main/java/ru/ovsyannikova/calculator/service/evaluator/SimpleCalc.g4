@@ -22,15 +22,19 @@ multiplyExp returns [double value]
     ;
 
 powerExp returns [double value]
-    : u1=unaryExp {$value =  $u1.value;}
-    (POWER u2=unaryExp {$value = Math.pow($u1.value, $u2.value);}
-    )*
+    : <assoc=right> u1=unaryExp {$value =  $u1.value;}
+    POWER u2=unaryExp {$value = Math.pow($u1.value, $u2.value);}
+    | <assoc=right> p=powerExp {$value =  $p.value;}
+    POWER u=unaryExp {$value = Math.pow($p.value, $u.value);}
+    | u=unaryExp {$value =  $u.value;}
     ;
 
 unaryExp returns [double value]
     : MINUS a=atomExp {$value = -$a.value;}
     | PLUS a=atomExp {$value = $a.value;}
     | a=atomExp {$value = $a.value;}
+    | MINUS u=unaryExp {$value = -$u.value;}
+    | PLUS u=unaryExp {$value = $u.value;}
     ;
 
 /* An expression atom is the smallest part of an expression: a number. Or
