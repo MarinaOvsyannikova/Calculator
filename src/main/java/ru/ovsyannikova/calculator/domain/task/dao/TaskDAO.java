@@ -2,14 +2,16 @@ package ru.ovsyannikova.calculator.domain.task.dao;
 
 import ru.ovsyannikova.calculator.domain.task.model.Task;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 public interface TaskDAO {
-    void insert(Task task) throws SQLException;
-    List<Task> findAllByCreated(String date) throws SQLException;
+    void insert(Task task, Connection connection) throws SQLException;
+    List<Task> findAllByCreated(String date) throws SQLException, ParseException;
 
-    Number countAllByCreated(String date) throws SQLException;
+    Number countAllByCreated(String date) throws SQLException, ParseException;
 
     Long countByRightParenthesisAmount() throws SQLException;
     Long countByLeftParenthesisAmount() throws SQLException;

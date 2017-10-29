@@ -6,7 +6,11 @@ import ru.ovsyannikova.calculator.domain.task.model.Task;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class JdbcTaskDAO implements TaskDAO {
@@ -17,7 +21,7 @@ public class JdbcTaskDAO implements TaskDAO {
     }
 
     @Override
-    public void insert(Task task) throws SQLException {
+    public void insert(Task task, Connection connection) throws SQLException {
         String sql = "INSERT INTO tasks (" +
                 "task, " +
                 "created," +
@@ -30,21 +34,19 @@ public class JdbcTaskDAO implements TaskDAO {
                 "leftParenthesisAmount," +
                 "rightParenthesisAmount) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, task.getTask());
-                statement.setString(2, task.getCreated());
-                statement.setDouble(3, task.getResult());
-                statement.setInt(4, task.getAdditionsAmount());
-                statement.setInt(5, task.getSubtractionsAmount());
-                statement.setInt(6, task.getMultiplicationsAmount());
-                statement.setInt(7, task.getDivisionsAmount());
-                statement.setInt(8, task.getPowersAmount());
-                statement.setInt(9, task.getLeftParenthesisAmount());
-                statement.setInt(10, task.getRightParenthesisAmount());
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, task.getTask());
+            statement.setString(2, task.getCreated());
+            statement.setDouble(3, task.getResult());
+            statement.setInt(4, task.getAdditionsAmount());
+            statement.setInt(5, task.getSubtractionsAmount());
+            statement.setInt(6, task.getMultiplicationsAmount());
+            statement.setInt(7, task.getDivisionsAmount());
+            statement.setInt(8, task.getPowersAmount());
+            statement.setInt(9, task.getLeftParenthesisAmount());
+            statement.setInt(10, task.getRightParenthesisAmount());
 
-                statement.executeUpdate();
-            }
+            statement.executeUpdate();
         }
     }
 
@@ -78,7 +80,12 @@ public class JdbcTaskDAO implements TaskDAO {
     }
 
     @Override
-    public List<Task> findAllByCreated(String date) throws SQLException {
+    public List<Task> findAllByCreated(String date) throws SQLException, ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        formatter.setLenient(false);
+        Date dateD = formatter.parse(date);
+        System.out.println(formatter.format(dateD));
+
         String sql = "SELECT * FROM tasks WHERE created = ?";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -90,7 +97,12 @@ public class JdbcTaskDAO implements TaskDAO {
     }
 
     @Override
-    public Long countAllByCreated(String date) throws SQLException {
+    public Long countAllByCreated(String date) throws SQLException, ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        formatter.setLenient(false);
+        Date dateD = formatter.parse(date);
+        System.out.println(formatter.format(dateD));
+
         String sql = "SELECT COUNT(*) AS rowcount FROM tasks WHERE created = ?";
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {

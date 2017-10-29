@@ -1,10 +1,10 @@
 package ru.ovsyannikova.calculator.service;
 
-import io.swagger.models.auth.In;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ovsyannikova.calculator.service.evaluator.SimpleCalcLexer;
@@ -22,11 +22,18 @@ public class Evaluator {
     public Evaluator() {
     }
 
-    public EvaluationResult getResult(String task) throws IOException {
+    public EvaluationResult getResult(String task) throws IOException, ParseCancellationException {
         CodePointCharStream in = CharStreams.fromReader(new StringReader(task));
         SimpleCalcLexer lexer = new SimpleCalcLexer(in);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
         CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
+
         SimpleCalcParser parser = new SimpleCalcParser(commonTokenStream);
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
         EvaluationResult result = evaluate(task, parser);
         result = prepareOperations(result, commonTokenStream);
         return prepareNumbers(result, commonTokenStream);

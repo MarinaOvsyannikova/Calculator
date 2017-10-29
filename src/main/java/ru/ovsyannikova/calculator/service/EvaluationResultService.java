@@ -11,6 +11,7 @@ import ru.ovsyannikova.calculator.domain.task.model.Task;
 
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,11 +34,22 @@ public class EvaluationResultService {
 
 
     public void collectData(EvaluationResult evaluationResult) throws SQLException {
-        saveTask(evaluationResult);
-        collectNumbersAmounts(evaluationResult);
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                saveTask(evaluationResult, connection);
+                collectNumbersAmounts(evaluationResult, connection);
+                connection.commit();
+            } catch (SQLException ex) {
+                connection.rollback();
+            } finally {
+                connection.setAutoCommit(true);
+            }
+        }
+
     }
 
-    public void saveTask(EvaluationResult evaluationResult) throws SQLException {
+    public void saveTask(EvaluationResult evaluationResult, Connection connection) throws SQLException {
         OffsetDateTime time = OffsetDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String resultDate = time.format(formatter);
@@ -51,19 +63,15 @@ public class EvaluationResultService {
                 evaluationResult.getOperationAmounts().get("("),
                 evaluationResult.getOperationAmounts().get(")")
                 );
-        taskDAO.insert(task);
+        taskDAO.insert(task, connection);
     }
 
-    private void collectNumber(Double number, Integer count) throws SQLException {
-        NumberCounter numberCounter = new NumberCounter(number, count);
-        numberDAO.upsert(numberCounter);
-    }
-
-    private void collectNumbersAmounts(EvaluationResult evaluationResult) throws SQLException {
+    private void collectNumbersAmounts(EvaluationResult evaluationResult, Connection connection) throws SQLException {
         HashMap<Double, Integer> numberAmounts = evaluationResult.getNumberAmounts();
         Set<Map.Entry<Double, Integer>> entries = numberAmounts.entrySet();
         for (Map.Entry<Double, Integer> elem: entries) {
-            collectNumber(elem.getKey(), elem.getValue());
+            NumberCounter numberCounter = new NumberCounter(elem.getKey(), elem.getValue());
+            numberDAO.upsert(numberCounter, connection);
         }
     }
 

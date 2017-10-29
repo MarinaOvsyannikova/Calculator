@@ -11,6 +11,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,11 +57,11 @@ public class EvaluationTaskService {
         }
     }
 
-    public Number countTasksByDate(String date) throws SQLException {
+    public Number countTasksByDate(String date) throws SQLException , ParseException {
         return taskDAO.countAllByCreated(date);
     }
 
-    public Iterable<Task> findAllByDate(String date) throws SQLException {
+    public Iterable<Task> findAllByDate(String date) throws SQLException, ParseException {
         return taskDAO.findAllByCreated(date);
     }
 

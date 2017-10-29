@@ -16,6 +16,7 @@ import ru.ovsyannikova.calculator.service.EvaluationTaskService;
 import ru.ovsyannikova.calculator.service.NumberCounterService;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
 @Controller
 public class StatisticsController {
@@ -29,13 +30,13 @@ public class StatisticsController {
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public @ResponseBody TasksCountResponse countTaskByDate(DateDto request) throws SQLException {
+    public @ResponseBody TasksCountResponse countTaskByDate(DateDto request) throws SQLException, ParseException {
         TasksCountResponse response = new TasksCountResponse(taskService.countTasksByDate(request.getDate()));
         return response;
     }
 
     @RequestMapping(value = "/ondate", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public @ResponseBody EvaluationTasksResponse findTasksByDate(DateDto request) throws SQLException {
+    public @ResponseBody EvaluationTasksResponse findTasksByDate(DateDto request) throws SQLException, ParseException {
         EvaluationTasksResponse response = new EvaluationTasksResponse(taskService.findAllByDate(request.getDate()));
         return response;
     }

@@ -40,17 +40,15 @@ public class JdbcNumberDAO implements NumberDAO{
     }
 
     @Override
-    public void upsert(NumberCounter numberCounter) throws SQLException {
+    public void upsert(NumberCounter numberCounter, Connection connection) throws SQLException {
         String sql = "MERGE INTO numbers USING (VALUES (CAST(? AS DECIMAL), CAST(? AS INTEGER)))" +
                 "   AS vals(numb ,amount) ON numbers.number = vals.numb" +
                 "   WHEN MATCHED THEN UPDATE SET numbers.amount = (numbers.amount + vals.amount)" +
                 "   WHEN NOT MATCHED THEN INSERT VALUES (null, vals.numb, vals.amount)";
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setDouble(1, numberCounter.getNumber());
-                statement.setLong(2, numberCounter.getAmount());
-                statement.executeUpdate();
-            }
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setDouble(1, numberCounter.getNumber());
+            statement.setLong(2, numberCounter.getAmount());
+            statement.executeUpdate();
         }
     }
 }
