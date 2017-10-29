@@ -1,6 +1,7 @@
 package ru.ovsyannikova.calculator.dto.response;
 
-import ru.ovsyannikova.calculator.domain.entity.NumberCounter;
+
+import ru.ovsyannikova.calculator.domain.number.model.NumberCounter;
 
 public class NumberCounterResponse {
     Iterable<NumberCounter> numberCounters;

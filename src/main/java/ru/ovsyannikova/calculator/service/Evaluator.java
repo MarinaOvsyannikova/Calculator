@@ -1,5 +1,6 @@
 package ru.ovsyannikova.calculator.service;
 
+import io.swagger.models.auth.In;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -36,15 +37,17 @@ public class Evaluator {
     }
 
     private EvaluationResult prepareNumbers(EvaluationResult result, CommonTokenStream commonTokenStream) {
-        HashMap<Number, Integer> hashMap = new HashMap<>();
+        HashMap<Double, Integer> hashMap = new HashMap<>();
         List<Token> array = commonTokenStream.getTokens();
         for (Token o: array) {
             if (o.getType() == 9) {
                 Double number = Double.parseDouble(o.getText());
-                if(hashMap.get(number) == null)
+                if(hashMap.get(number) == null) {
                     hashMap.put(number, 1);
-                Integer count = hashMap.get(number);
-                hashMap.put(number, count + 1);
+                } else {
+                    Integer count = hashMap.get(number);
+                    hashMap.put(number, count + 1);
+                }
             }
         }
         result.setNumberAmounts(hashMap);

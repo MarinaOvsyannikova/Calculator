@@ -2,20 +2,27 @@ package ru.ovsyannikova.calculator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ovsyannikova.calculator.domain.entity.NumberCounter;
-import ru.ovsyannikova.calculator.domain.repository.NumberCounterRepository;
+import ru.ovsyannikova.calculator.domain.number.dao.NumberDAO;
+import ru.ovsyannikova.calculator.domain.number.dao.impl.JdbcNumberDAO;
+import ru.ovsyannikova.calculator.domain.number.model.NumberCounter;
+
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.List;
 
 @Service
 public class NumberCounterService {
-    private NumberCounterRepository numberCounterRepository;
+    private DataSource dataSource;
+    private NumberDAO numberDAO;
 
     @Autowired
-    public NumberCounterService(NumberCounterRepository numberCounterRepository) {
-        this.numberCounterRepository = numberCounterRepository;
+    public NumberCounterService(DataSource dataSource) {
+        this.dataSource = dataSource;
+        numberDAO = new JdbcNumberDAO(dataSource);
     }
 
-    public NumberCounter getPopularNumber() {
-        return numberCounterRepository.findMostPopular();
+    public List<NumberCounter> getPopularNumber() throws SQLException {
+        return numberDAO.findMostPopular();
     }
 
 }

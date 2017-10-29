@@ -1,15 +1,10 @@
-package ru.ovsyannikova.calculator.domain.entity;
+package ru.ovsyannikova.calculator.domain.task.model;
 
-import javax.persistence.*;
-
-@Entity
-public class EvaluationTask {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class Task {
     private Long id;
     private String task;
     private String created;
-    private Number result;
+    private Double result;
     private Integer additionsAmount;
     private Integer subtractionsAmount;
     private Integer multiplicationsAmount;
@@ -18,9 +13,7 @@ public class EvaluationTask {
     private Integer leftParenthesisAmount;
     private Integer rightParenthesisAmount;
 
-    public EvaluationTask() {}
-
-    public EvaluationTask(String task, String created, Number result, Integer additionsAmount, Integer subtractionsAmount, Integer multiplicationsAmount, Integer divisionsAmount, Integer powersAmount, Integer leftParenthesisAmount, Integer rightParenthesisAmount) {
+    public Task(String task, String created, Double result, Integer additionsAmount, Integer subtractionsAmount, Integer multiplicationsAmount, Integer divisionsAmount, Integer powersAmount, Integer leftParenthesisAmount, Integer rightParenthesisAmount) {
         this.task = task;
         this.created = created;
         this.result = result;
@@ -57,11 +50,11 @@ public class EvaluationTask {
         this.created = created;
     }
 
-    public Number getResult() {
+    public Double getResult() {
         return result;
     }
 
-    public void setResult(Number result) {
+    public void setResult(Double result) {
         this.result = result;
     }
 

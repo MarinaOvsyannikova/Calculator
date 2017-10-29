@@ -5,13 +5,13 @@ import java.util.HashMap;
 public class EvaluationResult {
     private String task;
     private Double result;
-    private HashMap<Number, Integer> numberAmounts;
+    private HashMap<Double, Integer> numberAmounts;
     private HashMap<String, Integer> operationAmounts;
 
     public EvaluationResult() {
     }
 
-    public EvaluationResult(String task, Double result, HashMap<Number, Integer> numberAmounts, HashMap<String, Integer> operationAmounts) {
+    public EvaluationResult(String task, Double result, HashMap<Double, Integer> numberAmounts, HashMap<String, Integer> operationAmounts) {
         this.task = task;
         this.result = result;
         this.numberAmounts = numberAmounts;
@@ -34,11 +34,11 @@ public class EvaluationResult {
         this.result = result;
     }
 
-    public HashMap<Number, Integer> getNumberAmounts() {
+    public HashMap<Double, Integer> getNumberAmounts() {
         return numberAmounts;
     }
 
-    public void setNumberAmounts(HashMap<Number, Integer> numberAmounts) {
+    public void setNumberAmounts(HashMap<Double, Integer> numberAmounts) {
         this.numberAmounts = numberAmounts;
     }
 

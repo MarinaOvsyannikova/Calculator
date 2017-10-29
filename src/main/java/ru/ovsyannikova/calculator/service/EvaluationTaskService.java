@@ -2,44 +2,50 @@ package ru.ovsyannikova.calculator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ovsyannikova.calculator.domain.entity.EvaluationTask;
-import ru.ovsyannikova.calculator.domain.repository.EvaluationTaskRepository;
+import ru.ovsyannikova.calculator.domain.SupplierWithExceptions;
+import ru.ovsyannikova.calculator.domain.task.dao.TaskDAO;
+import ru.ovsyannikova.calculator.domain.task.dao.impl.JdbcTaskDAO;
+import ru.ovsyannikova.calculator.domain.task.model.Task;
 
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
 
 @Service
 public class EvaluationTaskService {
+    private DataSource dataSource;
     private Evaluator evaluator;
-    private EvaluationTaskRepository taskRepository;
+    private TaskDAO taskDAO;
 
-    private HashMap<String, Function<Integer, List<EvaluationTask>>> findMethodsByOperation;
-    private HashMap<String, Function<Integer, Long>> countMethodsByOperation;
+    private HashMap<String, SupplierWithExceptions<List<Task>>> findMethodsByOperation;
+    private HashMap<String, SupplierWithExceptions<Long>> countMethodsByOperation;
 
     @Autowired
-    public EvaluationTaskService(Evaluator evaluator, EvaluationTaskRepository taskRepository) {
+    public EvaluationTaskService(Evaluator evaluator, DataSource dataSource) throws NamingException {
+        this.dataSource = dataSource;
+        this.taskDAO = new JdbcTaskDAO(dataSource);
         this.evaluator = evaluator;
-        this.taskRepository = taskRepository;
 
         findMethodsByOperation = new HashMap<>();
-        findMethodsByOperation.put("+", taskRepository::findByAdditionsAmountNot);
-        findMethodsByOperation.put("-", taskRepository::findBySubtractionsAmountNot);
-        findMethodsByOperation.put("*", taskRepository::findByMultiplicationsAmountNot);
-        findMethodsByOperation.put("/", taskRepository::findByDivisionsAmountNot);
-        findMethodsByOperation.put("^", taskRepository::findByPowersAmountNot);
-        findMethodsByOperation.put("(", taskRepository::findByLeftParenthesisAmountNot);
-        findMethodsByOperation.put(")", taskRepository::findByRightParenthesisAmountNot);
+        findMethodsByOperation.put("+", taskDAO::findByAdditionsAmount);
+        findMethodsByOperation.put("-", taskDAO::findBySubtractionsAmount);
+        findMethodsByOperation.put("*", taskDAO::findByMultiplicationsAmount);
+        findMethodsByOperation.put("/", taskDAO::findByDivisionsAmount);
+        findMethodsByOperation.put("^", taskDAO::findByPowersAmount);
+        findMethodsByOperation.put("(", taskDAO::findByLeftParenthesisAmount);
+        findMethodsByOperation.put(")", taskDAO::findByRightParenthesisAmount);
 
         countMethodsByOperation = new HashMap<>();
-        countMethodsByOperation.put("+", taskRepository::countByAdditionsAmountNot);
-        countMethodsByOperation.put("-", taskRepository::countBySubtractionsAmountNot);
-        countMethodsByOperation.put("*", taskRepository::countByMultiplicationsAmountNot);
-        countMethodsByOperation.put("/", taskRepository::countByDivisionsAmountNot);
-        countMethodsByOperation.put("^", taskRepository::countByPowersAmountNot);
-        countMethodsByOperation.put("(", taskRepository::countByLeftParenthesisAmountNot);
-        countMethodsByOperation.put(")", taskRepository::countByRightParenthesisAmountNot);
+        countMethodsByOperation.put("+", taskDAO::countByAdditionsAmount);
+        countMethodsByOperation.put("-", taskDAO::countBySubtractionsAmount);
+        countMethodsByOperation.put("*", taskDAO::countByMultiplicationsAmount);
+        countMethodsByOperation.put("/", taskDAO::countByDivisionsAmount);
+        countMethodsByOperation.put("^", taskDAO::countByPowersAmount);
+        countMethodsByOperation.put("(", taskDAO::countByLeftParenthesisAmount);
+        countMethodsByOperation.put(")", taskDAO::countByRightParenthesisAmount);
     }
 
     public EvaluationResult evaluate(String task) throws IOException {
@@ -50,22 +56,22 @@ public class EvaluationTaskService {
         }
     }
 
-    public Number countTasksByDate(String date) {
-        return taskRepository.countAllByCreated(date);
+    public Number countTasksByDate(String date) throws SQLException {
+        return taskDAO.countAllByCreated(date);
     }
 
-    public Iterable<EvaluationTask> findAllByDate(String date) {
-        return taskRepository.findAllByCreated(date);
+    public Iterable<Task> findAllByDate(String date) throws SQLException {
+        return taskDAO.findAllByCreated(date);
     }
 
 
 
-    public Number countTasksByOperation(String operation) {
-        return countMethodsByOperation.get(operation).apply(0);
+    public Long countTasksByOperation(String operation) throws SQLException {
+        return countMethodsByOperation.get(operation).get();
     }
 
-    public Iterable<EvaluationTask> findTasksByOperation(String operation) {
+    public Iterable<Task> findTasksByOperation(String operation) throws SQLException {
 
-        return findMethodsByOperation.get(operation).apply(0);
+        return findMethodsByOperation.get(operation).get();
     }
 }
