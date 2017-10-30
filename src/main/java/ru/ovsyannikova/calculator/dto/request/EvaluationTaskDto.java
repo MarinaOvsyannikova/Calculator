@@ -1,6 +1,9 @@
 package ru.ovsyannikova.calculator.dto.request;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class EvaluationTaskDto {
+    @ApiModelProperty(value = "Task", required = true, dataType = "java.lang.String")
     private String task;
 
     public EvaluationTaskDto() {

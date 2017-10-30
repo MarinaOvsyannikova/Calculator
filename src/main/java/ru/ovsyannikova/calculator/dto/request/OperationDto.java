@@ -1,6 +1,9 @@
 package ru.ovsyannikova.calculator.dto.request;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class OperationDto {
+    @ApiModelProperty(value = "Operation", required = true, dataType = "java.lang.String")
     private String operation;
 
     public OperationDto() {

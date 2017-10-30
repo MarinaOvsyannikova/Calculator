@@ -45,7 +45,8 @@
           {
             "name": "task",
             "in": "query",
-            "required": false,
+            "description": "Task",
+            "required": true,
             "type": "string"
           }
         ],
@@ -88,7 +89,8 @@
           {
             "name": "date",
             "in": "query",
-            "required": false,
+            "description": "Date",
+            "required": true,
             "type": "string"
           }
         ],
@@ -367,7 +369,8 @@
           {
             "name": "date",
             "in": "query",
-            "required": false,
+            "description": "Date",
+            "required": true,
             "type": "string"
           }
         ],
@@ -407,7 +410,8 @@
           {
             "name": "operation",
             "in": "query",
-            "required": false,
+            "description": "Operation",
+            "required": true,
             "type": "string"
           }
         ],
@@ -447,7 +451,8 @@
           {
             "name": "operation",
             "in": "query",
-            "required": false,
+            "description": "Operation",
+            "required": true,
             "type": "string"
           }
         ],
