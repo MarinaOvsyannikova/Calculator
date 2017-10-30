@@ -1,5 +1,8 @@
 package ru.ovsyannikova.calculator.dto.response;
 
+import io.swagger.annotations.SwaggerDefinition;
+
+@SwaggerDefinition
 public class NumberCounterDetailsResponse {
     private Number number;
 

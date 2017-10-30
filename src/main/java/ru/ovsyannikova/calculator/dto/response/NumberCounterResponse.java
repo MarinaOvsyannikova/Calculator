@@ -1,8 +1,10 @@
 package ru.ovsyannikova.calculator.dto.response;
 
 
+import io.swagger.annotations.SwaggerDefinition;
 import ru.ovsyannikova.calculator.domain.number.model.NumberCounter;
 
+@SwaggerDefinition
 public class NumberCounterResponse {
     Iterable<NumberCounter> numberCounters;
 

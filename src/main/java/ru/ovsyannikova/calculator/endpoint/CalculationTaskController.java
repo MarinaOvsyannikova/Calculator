@@ -1,5 +1,6 @@
 package ru.ovsyannikova.calculator.endpoint;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class CalculationTaskController {
         this.resultService = resultService;
     }
 
+    @ApiOperation(value = "Calculate from expression", response = EvaluationTaskDetailsResponse.class)
     @RequestMapping(value = "/calculate", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public EvaluationTaskDetailsResponse createNewRecord(EvaluationTaskDto request) throws IOException, SQLException {
         EvaluationResult evaluationResult = taskService.evaluate(request.getTask());
